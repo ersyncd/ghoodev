@@ -1,11 +1,9 @@
 (function () {
-  // 1. Cek apakah panel sudah ada? Kalau ada, jangan buat lagi.
   if (document.getElementById('ghoodev-panel')) {
     alert('Panel sudah aktif, cek pojok kanan bawah!');
     return;
   }
 
-  // 2. Buat Element Container Panel
   const panel = document.createElement('div');
   panel.id = 'ghoodev-panel';
   panel.style.cssText = `
@@ -23,7 +21,7 @@
         box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     `;
 
-  // 3. Isi HTML Panel
+
   panel.innerHTML = `
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
             <h3 style="margin:0; font-size:18px; font-weight:bold; color:#fab387;">🤖 Auto Kuesioner</h3>
@@ -60,30 +58,30 @@
 
   document.body.appendChild(panel);
 
-  // 4. Logic Utama (Fungsi Pengisi)
+
   function runAutomation() {
     const mode = document.querySelector('input[name="ghoodev-mode"]:checked').value;
     const statusEl = document.getElementById('ghoodev-status');
 
-    // Ambil semua grup radio
+
     const radioGroups = [...new Set(Array.from(document.querySelectorAll('input[type="radio"]')).map(el => el.name))];
     let filledCount = 0;
 
     radioGroups.forEach(groupName => {
       const inputs = Array.from(document.querySelectorAll(`input[name="${groupName}"]`));
 
-      // Filter target berdasarkan mode
+
       let targetInputs = [];
 
       if (mode === 'safe') {
-        // Ambil yg poin 3 atau 4
+
         targetInputs = inputs.filter(input => input.value.includes('"poin":3') || input.value.includes('"poin":4'));
       } else {
-        // Ambil yg poin 4 saja
+
         targetInputs = inputs.filter(input => input.value.includes('"poin":4'));
       }
 
-      // Eksekusi Klik
+
       if (targetInputs.length > 0) {
         const randomIndex = Math.floor(Math.random() * targetInputs.length);
         targetInputs[randomIndex].click();
@@ -95,7 +93,7 @@
     statusEl.style.color = "#a6e3a1";
   }
 
-  // 5. Event Listeners
+
   document.getElementById('ghoodev-run').onclick = runAutomation;
   document.getElementById('ghoodev-close').onclick = function () {
     panel.remove();
