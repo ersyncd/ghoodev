@@ -164,10 +164,10 @@
 						class="pointer-events-none h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
 					/>
 					<div
-						class="absolute inset-0 z-10 flex items-end justify-center gap-3 bg-gradient-to-t from-black/70 to-transparent pb-6 opacity-100 transition-opacity duration-300 group-hover:opacity-100 md:opacity-0"
+						class="absolute inset-0 z-10 flex items-end justify-center gap-3 bg-linear-to-t from-black/70 to-transparent pb-6 opacity-100 transition-opacity duration-300 group-hover:opacity-100 md:opacity-0"
 					>
 						<a
-							href="https://github.com/revxcode/adshotel/"
+							href="https://github.com/ersynd/adshotel/"
 							target="_blank"
 							class="inline-flex items-center gap-2 rounded-md bg-white px-3 py-2 text-sm font-medium text-black transition hover:bg-white/80"
 						>
@@ -175,7 +175,7 @@
 							Demo
 						</a>
 						<a
-							href="https://github.com/revxcode/adshotel/tree/dev"
+							href="https://github.com/ersynd/adshotel/tree/dev"
 							target="_blank"
 							class="inline-flex items-center gap-2 rounded-md bg-white px-3 py-2 text-sm font-medium text-black transition hover:bg-white/80"
 						>
@@ -209,7 +209,7 @@
 						class="pointer-events-none h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
 					/>
 					<div
-						class="absolute inset-0 z-10 flex items-end justify-center gap-3 bg-gradient-to-t from-black/70 to-transparent pb-6 opacity-100 transition-opacity duration-300 group-hover:opacity-100 md:opacity-0"
+						class="absolute inset-0 z-10 flex items-end justify-center gap-3 bg-linear-to-t from-black/70 to-transparent pb-6 opacity-100 transition-opacity duration-300 group-hover:opacity-100 md:opacity-0"
 					>
 						<a
 							href="https://electro-tools.vercel.app/"
@@ -220,7 +220,7 @@
 							Demo
 						</a>
 						<a
-							href="https://github.com/revxcode/electro-tools"
+							href="https://github.com/ersynd/electro-tools"
 							target="_blank"
 							class="inline-flex items-center gap-2 rounded-md bg-white px-3 py-2 text-sm font-medium text-black transition hover:bg-white/80"
 						>
@@ -256,7 +256,7 @@
 						class="pointer-events-none h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
 					/>
 					<div
-						class="absolute inset-0 z-10 flex items-end justify-center gap-3 bg-gradient-to-t from-black/70 to-transparent pb-6 opacity-100 transition-opacity duration-300 group-hover:opacity-100 md:opacity-0"
+						class="absolute inset-0 z-10 flex items-end justify-center gap-3 bg-linear-to-t from-black/70 to-transparent pb-6 opacity-100 transition-opacity duration-300 group-hover:opacity-100 md:opacity-0"
 					>
 						<a
 							href="https://simply-ai-six.vercel.app/"
@@ -267,7 +267,7 @@
 							Demo
 						</a>
 						<a
-							href="https://github.com/revxcode/SimplyAI"
+							href="https://github.com/ersynd/SimplyAI"
 							target="_blank"
 							class="inline-flex items-center gap-2 rounded-md bg-white px-3 py-2 text-sm font-medium text-black transition hover:bg-white/80"
 						>
@@ -313,7 +313,7 @@
 
 			<div class="flex justify-center gap-4">
 				<a
-					href="https://github.com/revxcode"
+					href="https://github.com/ersynd"
 					target="_blank"
 					aria-label="GitHub"
 					class="flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 text-black transition-all duration-300 hover:scale-110 hover:bg-black hover:text-white"

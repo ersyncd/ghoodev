@@ -29,7 +29,7 @@
 </script>
 
 <svelte:head>
-	<title>Personal Portfolio</title>
+	<title>Personal Portfolio | Teguh Ersyarudin</title>
 	<meta
 		name="description"
 		content="Personal portfolio of Teguh Ersyarudin — frontend developer specializing in Svelte, UI/UX, and responsive web apps. Explore projects, skills, and contact details."
