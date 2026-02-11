@@ -167,7 +167,7 @@
 						class="absolute inset-0 z-10 flex items-end justify-center gap-3 bg-linear-to-t from-black/70 to-transparent pb-6 opacity-100 transition-opacity duration-300 group-hover:opacity-100 md:opacity-0"
 					>
 						<a
-							href="https://github.com/ersynd/adshotel/"
+							href="https://github.com/ersyncd/adshotel/"
 							target="_blank"
 							class="inline-flex items-center gap-2 rounded-md bg-white px-3 py-2 text-sm font-medium text-black transition hover:bg-white/80"
 						>
@@ -175,7 +175,7 @@
 							Demo
 						</a>
 						<a
-							href="https://github.com/ersynd/adshotel/tree/dev"
+							href="https://github.com/ersyncd/adshotel/tree/dev"
 							target="_blank"
 							class="inline-flex items-center gap-2 rounded-md bg-white px-3 py-2 text-sm font-medium text-black transition hover:bg-white/80"
 						>
@@ -220,7 +220,7 @@
 							Demo
 						</a>
 						<a
-							href="https://github.com/ersynd/electro-tools"
+							href="https://github.com/ersyncd/electro-tools"
 							target="_blank"
 							class="inline-flex items-center gap-2 rounded-md bg-white px-3 py-2 text-sm font-medium text-black transition hover:bg-white/80"
 						>
@@ -267,7 +267,7 @@
 							Demo
 						</a>
 						<a
-							href="https://github.com/ersynd/SimplyAI"
+							href="https://github.com/ersyncd/SimplyAI"
 							target="_blank"
 							class="inline-flex items-center gap-2 rounded-md bg-white px-3 py-2 text-sm font-medium text-black transition hover:bg-white/80"
 						>
@@ -313,7 +313,7 @@
 
 			<div class="flex justify-center gap-4">
 				<a
-					href="https://github.com/ersynd"
+					href="https://github.com/ersyncd"
 					target="_blank"
 					aria-label="GitHub"
 					class="flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 text-black transition-all duration-300 hover:scale-110 hover:bg-black hover:text-white"
