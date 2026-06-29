@@ -19,10 +19,18 @@
 	let aboutSection: HTMLElement;
 	let skillsSection: HTMLElement;
 	let projectsSection: HTMLElement;
+	let blogSection: HTMLElement;
 	let contactSection: HTMLElement;
 
 	onMount(() => {
-		sections.set({ heroSection, aboutSection, skillsSection, projectsSection, contactSection });
+		sections.set({
+			heroSection,
+			aboutSection,
+			skillsSection,
+			projectsSection,
+			blogSection,
+			contactSection
+		});
 	});
 
 	const scrollToSection = (name: string) => {
@@ -289,6 +297,18 @@
 					</div>
 				</div>
 			</div>
+		</div>
+	</div>
+</section>
+
+<section id="blog" bind:this={blogSection} class="bg-white py-24 pb-12">
+	<div class="container mx-auto px-6">
+		<div class="mx-auto max-w-3xl text-center">
+			<h2 class="mb-8 text-4xl font-bold text-black md:text-5xl">Blogs</h2>
+
+			<a href="blog-slug" target="_blank" rel="noopener noreferrer" aria-label="blog-title">
+				<div></div>
+			</a>
 		</div>
 	</div>
 </section>
