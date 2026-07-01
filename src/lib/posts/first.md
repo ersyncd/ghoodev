@@ -1,9 +1,34 @@
 ---
-title: "Halo Dunia"
-date: "2026-03-24"
+title: 'Building a small bridge between hardware and the web'
+date: '2026-06-24'
+description: 'A short note on keeping embedded work and SvelteKit work close together.'
+tags: ['SvelteKit', 'TypeScript', 'ESP32', 'IoT']
 ---
 
-But it has an important downside, the sensor temperature is affected by the Pi's CPU as it is very close to the board. So the temperature needs to be compensated, which is not as simple as applying a fixed offset as stated in the Pimoroni's tutorial. Instead I tried to apply a linear regression by obtaining the temperature from another weather station that, luckily, is close to my home.
+Most of my side work starts with a simple problem: a sensor, a small board, and a web interface that needs to stay readable.
 
-Apart of installing the Weather HAT and reading the data from the sensors, the most important challenge was finding the best place for it in the balcony and how to isolate it from the external conditions, while at the same time allowing enough ventilation to avoid heat accumulation inside.
+The useful part is usually not the flashy UI. It is the path from hardware input to a predictable data shape, then into a layout that people can scan quickly.
 
+## Why I keep both sides close
+
+When the frontend and the device code stay close to each other, the data flow is easier to reason about. I can make decisions about payload shape, refresh timing, and state handling without guessing how the other layer will behave.
+
+That helps in projects like ESP32 dashboards, utility apps, and small internal tools where the interface only works if the underlying data is clean.
+
+## A small example
+
+```ts
+type SensorReading = {
+	temperature: number;
+	humidity: number;
+	updatedAt: string;
+};
+
+export const reading: SensorReading = {
+	temperature: 28.4,
+	humidity: 61,
+	updatedAt: new Date().toISOString()
+};
+```
+
+That kind of shape is enough for most of the interfaces I build. Keep it small, keep it explicit, and let the UI do less work.
