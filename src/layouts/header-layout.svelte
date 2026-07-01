@@ -1,149 +1,134 @@
-<script>
-	import { onMount } from 'svelte';
+<script lang="ts">
 	import { page } from '$app/state';
+	import { sections } from '@/lib/stores/scroll';
+	import { cn } from '@/lib/utils';
+	import { Menu, X } from '@lucide/svelte';
+	import { onMount } from 'svelte';
+	import { get } from 'svelte/store';
 
-	$: currentPath = page.url.pathname;
+	const homeLinks = [
+		{ label: 'About', target: 'aboutSection' },
+		{ label: 'Skills', target: 'skillsSection' },
+		{ label: 'Projects', target: 'projectsSection' },
+		{ label: 'Blog', target: 'blogSection' },
+		{ label: 'Contact', target: 'contactSection' }
+	];
 
-	let isMobileMenuOpen = false;
+	const blogLinks = [
+		{ label: 'Home', href: '/' },
+		{ label: 'Blogs', href: '/blogs' }
+	];
+
+	let mobileMenuOpen = $state(false);
+	let scrolled = $state(false);
+
+	const closeMenu = () => {
+		mobileMenuOpen = false;
+	};
+
+	const scrollToSection = (target: string, event: Event) => {
+		event.preventDefault();
+		const currentSections = get(sections);
+		currentSections[target]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+		closeMenu();
+	};
 
 	onMount(() => {
+		const handleScroll = () => {
+			scrolled = window.scrollY > 8;
+		};
+
 		const handleResize = () => {
-			if (window.innerWidth > 768) {
-				isMobileMenuOpen = false;
+			if (window.innerWidth >= 768) {
+				closeMenu();
 			}
 		};
 
+		handleScroll();
+		window.addEventListener('scroll', handleScroll, { passive: true });
 		window.addEventListener('resize', handleResize);
 
 		return () => {
+			window.removeEventListener('scroll', handleScroll);
 			window.removeEventListener('resize', handleResize);
 		};
 	});
-	function toggleMobileMenu() {
-		isMobileMenuOpen = !isMobileMenuOpen;
-	}
 </script>
 
-<header class="flex items-center justify-between bg-transparent p-4 text-white">
-	<div class="z-50 flex w-full items-center justify-between md:justify-around">
-		<div class="flex flex-col items-end">
-			<a href="/" class="text-2xl font-bold">GhooDev</a>
-			<div class="flex gap-1">
-				<div class="h-2 w-2 bg-cyan-500"></div>
-				<div class="h-2 w-2 bg-cyan-500"></div>
-				<div class="h-2 w-2 bg-cyan-500"></div>
-				<div class="h-2 w-2 bg-cyan-500"></div>
-				<div class="h-2 w-2 bg-cyan-500"></div>
-				<div class="h-2 w-12 bg-gradient-to-r from-cyan-500 to-indigo-500"></div>
+<header
+	class={cn(
+		'fixed inset-x-0 top-0 z-40 border-b border-transparent transition-colors duration-300',
+		scrolled && 'border-zinc-800/70 bg-zinc-950/85 backdrop-blur-xl'
+	)}
+>
+	<div class="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
+		<a href="/" class="group flex items-center gap-3">
+			<span class="text-sm font-semibold tracking-[0.35em] text-zinc-100 uppercase">ersyncd</span>
+			<span class="hidden h-px w-8 bg-zinc-700 transition-all duration-300 group-hover:w-12 sm:block"></span>
+			<span class="text-xs text-zinc-500">teguh ersyarudin</span>
+		</a>
+
+		<nav class="hidden items-center gap-8 text-sm text-zinc-400 md:flex">
+			{#if page.url.pathname === '/'}
+				{#each homeLinks as item}
+					<button
+						type="button"
+						onclick={(event) => scrollToSection(item.target, event)}
+						class="transition-colors hover:text-zinc-100"
+					>
+						{item.label}
+					</button>
+				{/each}
+				<a href="/blogs" class="transition-colors hover:text-zinc-100">Blogs</a>
+			{:else}
+				{#each blogLinks as item}
+					<a href={item.href} class="transition-colors hover:text-zinc-100">{item.label}</a>
+				{/each}
+			{/if}
+		</nav>
+
+		<button
+			type="button"
+			onclick={() => (mobileMenuOpen = !mobileMenuOpen)}
+			class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900/40 text-zinc-100 transition-colors hover:border-zinc-700 hover:bg-zinc-900 md:hidden"
+			aria-expanded={mobileMenuOpen}
+			aria-label="Toggle navigation"
+		>
+			{#if mobileMenuOpen}
+				<X class="h-5 w-5" />
+			{:else}
+				<Menu class="h-5 w-5" />
+			{/if}
+		</button>
+	</div>
+
+	{#if mobileMenuOpen}
+		<div class="border-t border-zinc-800/80 bg-zinc-950/95 px-6 py-5 backdrop-blur-xl md:hidden">
+			<div class="mx-auto flex w-full max-w-7xl flex-col gap-4 text-sm text-zinc-300">
+				{#if page.url.pathname === '/'}
+					{#each homeLinks as item}
+						<button
+							type="button"
+							onclick={(event) => scrollToSection(item.target, event)}
+							class="flex items-center justify-between rounded-2xl border border-zinc-800/70 bg-zinc-900/30 px-4 py-3 text-left transition-colors hover:border-zinc-700 hover:bg-zinc-900/70"
+						>
+							<span>{item.label}</span>
+							<span class="text-xs text-zinc-500">→</span>
+						</button>
+					{/each}
+				{:else}
+					{#each blogLinks as item}
+						<a
+							href={item.href}
+							onclick={closeMenu}
+							class="flex items-center justify-between rounded-2xl border border-zinc-800/70 bg-zinc-900/30 px-4 py-3 transition-colors hover:border-zinc-700 hover:bg-zinc-900/70"
+						>
+							<span>{item.label}</span>
+							<span class="text-xs text-zinc-500">→</span>
+						</a>
+					{/each}
+				{/if}
 			</div>
 		</div>
-		<nav class="relative z-20 ml-6">
-			<button
-				type="button"
-				on:click={toggleMobileMenu}
-				class="rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white md:hidden"
-			>
-				<span class="sr-only">Toggle navigation</span>
-				{#if !isMobileMenuOpen}
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="h-6 w-6"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor"
-					>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M4 6h16M4 12h16m-7 6h7"
-						/>
-					</svg>
-				{:else}
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="h-6 w-6"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor"
-					>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M6 18L18 6M6 6l12 12"
-						/>
-					</svg>
-				{/if}
-			</button>
-			<ul
-				class={'absolute top-12 right-0 min-w-20 origin-top-right flex-col space-y-8 rounded-md bg-zinc-900 px-4 py-8 shadow-md transition-all duration-300 ease-in-out md:static md:flex-row md:space-y-0 md:space-x-6 md:rounded-none md:bg-transparent md:p-0 ' +
-					(isMobileMenuOpen
-						? 'scale-100 opacity-100'
-						: 'scale-0 opacity-0 md:flex md:scale-100 md:opacity-100')}
-			>
-				<li
-					class={'relative ' +
-						(currentPath === '/' ? 'text-cyan-500' : 'text-gray-200 hover:text-gray-400')}
-				>
-					<a href="/" class="flex flex-col items-center gap-2 text-sm">
-						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-							><path
-								fill="none"
-								stroke="currentColor"
-								stroke-linecap="round"
-								stroke-width="1.5"
-								d="M15 18H9m12.636-5.042l-.279 1.937c-.487 3.388-.731 5.081-1.906 6.093S16.553 22 13.106 22h-2.212c-3.447 0-5.17 0-6.345-1.012s-1.419-2.705-1.906-6.093l-.279-1.937c-.38-2.637-.57-3.956-.029-5.083s1.691-1.813 3.992-3.183l1.385-.825C9.8 2.622 10.846 2 12 2s2.199.622 4.288 1.867l1.385.825c2.3 1.37 3.451 2.056 3.992 3.183"
-							/></svg
-						>
-						Home
-					</a>
-				</li>
-				<li
-					class={'relative ' +
-						(currentPath === '/about' ? 'text-cyan-500' : 'text-gray-200 hover:text-gray-400')}
-				>
-					<a href="/about" class="flex flex-col items-center gap-2 text-sm">
-						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-							><g fill="none" stroke="currentColor" stroke-width="1.5"
-								><circle cx="12" cy="9" r="3" /><path
-									stroke-linecap="round"
-									d="M17.97 20c-.16-2.892-1.045-5-5.97-5s-5.81 2.108-5.97 5"
-								/><path
-									stroke-linecap="round"
-									d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"
-								/></g
-							></svg
-						>
-						About
-					</a>
-				</li>
-				<li
-					class={'relative ' +
-						(currentPath === '/projects' ? 'text-cyan-500' : 'text-gray-200 hover:text-gray-400')}
-				>
-					<a href="/projects" class="flex flex-col items-center gap-2 text-sm">
-						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-							><g fill="none" stroke="currentColor" stroke-width="1.5"
-								><path
-									stroke-linecap="round"
-									d="M4.979 6.315C2.993 7.109 2 7.506 2 8s.993.89 2.979 1.685l2.808 1.124C9.773 11.603 10.767 12 12 12s2.227-.397 4.213-1.191l2.808-1.124C21.007 8.891 22 8.494 22 8s-.993-.89-2.979-1.685l-2.808-1.123C14.227 4.397 13.233 4 12 4c-.954 0-1.764.237-3 .712"
-								/><path
-									d="m5.766 10l-.787.315C2.993 11.109 2 11.507 2 12s.993.89 2.979 1.685l2.808 1.124C9.773 15.603 10.767 16 12 16s2.227-.397 4.213-1.191l2.808-1.124C21.007 12.891 22 12.493 22 12s-.993-.89-2.979-1.685L18.234 10"
-								/><path
-									stroke-linecap="round"
-									d="M19.021 17.685C21.007 16.891 22 16.494 22 16c0-.493-.993-.89-2.979-1.685L18.234 14M5.766 14l-.787.315C2.993 15.109 2 15.507 2 16s.993.89 2.979 1.685l2.808 1.124C9.773 19.603 10.767 20 12 20c.954 0 1.764-.237 3-.712"
-								/></g
-							></svg
-						>
-						Projects
-					</a>
-				</li>
-			</ul>
-		</nav>
-	</div>
+	{/if}
 </header>
-<div
-	class={'absolute top-0 z-40 min-h-screen w-full bg-black transition-opacity duration-300 ease-in-out ' +
-		(isMobileMenuOpen ? 'opacity-80' : 'hidden opacity-0')}
-></div>
