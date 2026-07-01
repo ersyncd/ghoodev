@@ -1,6 +1,4 @@
-# Allow all robots and point to sitemap
 User-agent: *
 Allow: /
 
-# Update this to your production domain if different
-Sitemap: https://revxcode.github.io/ghoodev/sitemap.xml
+Sitemap: https://ersync.my.id/sitemap.xml
