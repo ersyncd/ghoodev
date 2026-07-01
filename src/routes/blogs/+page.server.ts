@@ -1,6 +1,7 @@
-import { getPosts } from '$lib/utils';
+import { getPosts } from '$lib/server/blog';
 
 export async function load() {
-  const posts = await getPosts();
-  return { posts };
+	const posts = await getPosts();
+
+	return { posts };
 }
