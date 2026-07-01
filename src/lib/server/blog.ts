@@ -115,11 +115,17 @@ function parseFrontmatter(raw: string) {
 }
 
 const renderInline = (value: string) => {
-	let html = escapeHtml(value);
-	html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
-	html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-	html = html.replace(/(^|[^*])\*([^*]+)\*(?!\*)/g, '$1<em>$2</em>');
-	html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noreferrer">$1</a>');
+	let html = value
+		.replace(/`([^`]+)`/g, (_, content) => `<code class="rounded bg-zinc-800/50 px-1.5 py-0.5 font-mono text-sm text-zinc-200">${escapeHtml(content)}</code>`)
+		.replace(/\*\*([^*]+)\*\*/g, (_, content) => `<strong class="font-semibold text-zinc-50">${escapeHtml(content)}</strong>`)
+		.replace(/(^|[^*])\*([^*]+)\*(?!\*)/g, (_, before, content) => `${before}<em class="italic text-zinc-300">${escapeHtml(content)}</em>`)
+		.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, text, url) => 
+			`<a href="${escapeHtml(url)}" target="_blank" rel="noreferrer" class="text-blue-400 underline decoration-blue-400/30 underline-offset-2 transition-colors hover:text-blue-300 hover:decoration-blue-300/50">${escapeHtml(text)}</a>`
+		)
+		.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_, alt, url) => 
+			`<img src="${escapeHtml(url)}" alt="${escapeHtml(alt)}" class="my-6 rounded-lg border border-zinc-800" loading="lazy" />`
+		);
+	
 	return html;
 };
 
@@ -131,7 +137,7 @@ export function renderMarkdown(markdown: string) {
 	const pushParagraph = (content: string[]) => {
 		const text = content.join(' ').trim();
 		if (text) {
-			blocks.push(`<p>${renderInline(text)}</p>`);
+			blocks.push(`<p class="mb-6 leading-8 text-zinc-300">${renderInline(text)}</p>`);
 		}
 	};
 
@@ -143,6 +149,7 @@ export function renderMarkdown(markdown: string) {
 			continue;
 		}
 
+		// Code block
 		if (line.startsWith('```')) {
 			const language = line.slice(3).trim();
 			index += 1;
@@ -154,50 +161,141 @@ export function renderMarkdown(markdown: string) {
 			}
 
 			blocks.push(
-				`<pre><code${language ? ` data-language="${escapeHtml(language)}"` : ''}>${escapeHtml(codeLines.join('\n'))}</code></pre>`
+				`<pre class="mb-6 overflow-x-auto rounded-lg border border-zinc-800 bg-zinc-900/50 p-4"><code${language ? ` data-language="${escapeHtml(language)}"` : ''} class="font-mono text-sm text-zinc-200">${escapeHtml(codeLines.join('\n'))}</code></pre>`
 			);
 			index += 1;
 			continue;
 		}
 
+		// Headings
 		if (/^#{1,6}\s/.test(line)) {
 			const level = line.match(/^#{1,6}/)?.[0].length ?? 1;
 			const text = line.replace(/^#{1,6}\s+/, '');
-			blocks.push(`<h${level}>${renderInline(text)}</h${level}>`);
+			const classes = {
+				1: 'mb-6 mt-12 text-3xl font-bold tracking-tight text-zinc-50 sm:text-4xl',
+				2: 'mb-4 mt-10 text-2xl font-semibold tracking-tight text-zinc-50 sm:text-3xl',
+				3: 'mb-3 mt-8 text-xl font-semibold tracking-tight text-zinc-50 sm:text-2xl',
+				4: 'mb-2 mt-6 text-lg font-semibold tracking-tight text-zinc-50',
+				5: 'mb-2 mt-4 text-base font-semibold tracking-tight text-zinc-50',
+				6: 'mb-2 mt-4 text-sm font-semibold tracking-tight text-zinc-50'
+			};
+			blocks.push(`<h${level} class="${classes[level as keyof typeof classes] || classes[2]}">${renderInline(text)}</h${level}>`);
 			index += 1;
 			continue;
 		}
 
+		// Blockquote
 		if (/^>\s?/.test(line)) {
 			const quoteLines: string[] = [];
 			while (index < lines.length && /^>\s?/.test(lines[index])) {
 				quoteLines.push(lines[index].replace(/^>\s?/, ''));
 				index += 1;
 			}
-			blocks.push(`<blockquote><p>${renderInline(quoteLines.join(' '))}</p></blockquote>`);
+			blocks.push(`<blockquote class="mb-6 border-l-4 border-blue-400/50 bg-zinc-800/30 pl-4 py-1 italic text-zinc-400">${renderInline(quoteLines.join(' '))}</blockquote>`);
 			continue;
 		}
 
+		// Unordered list
 		if (/^[-*+]\s/.test(line)) {
 			const items: string[] = [];
 			while (index < lines.length && /^[-*+]\s/.test(lines[index])) {
-				items.push(`<li>${renderInline(lines[index].replace(/^[-*+]\s+/, ''))}</li>`);
+				const content = lines[index].replace(/^[-*+]\s+/, '');
+				items.push(`<li class="relative pl-6 before:absolute before:left-0 before:top-3 before:h-1.5 before:w-1.5 before:rounded-full before:bg-zinc-500">${renderInline(content)}</li>`);
 				index += 1;
 			}
-			blocks.push(`<ul>${items.join('')}</ul>`);
+			blocks.push(`<ul class="mb-6 space-y-2 text-zinc-300">${items.join('')}</ul>`);
 			continue;
 		}
 
+		// Ordered list
 		if (/^\d+\.\s/.test(line)) {
 			const items: string[] = [];
+			let counter = 0;
 			while (index < lines.length && /^\d+\.\s/.test(lines[index])) {
-				items.push(`<li>${renderInline(lines[index].replace(/^\d+\.\s+/, ''))}</li>`);
+				counter += 1;
+				const content = lines[index].replace(/^\d+\.\s+/, '');
+				items.push(`<li class="relative pl-8 before:absolute before:left-0 before:font-mono before:text-sm before:text-zinc-500">${renderInline(content)}</li>`);
 				index += 1;
 			}
-			blocks.push(`<ol>${items.join('')}</ol>`);
+			blocks.push(`<ol class="mb-6 space-y-2 text-zinc-300" style="counter-reset: list-item ${items.length - items.length}">${items.join('')}</ol>`);
 			continue;
 		}
 
+		// Horizontal rule
+		if (/^---$/.test(line) || /^\*\*\*$/.test(line) || /^___$/.test(line)) {
+			blocks.push(`<hr class="my-8 border-zinc-800" />`);
+			index += 1;
+			continue;
+		}
+
+		// Table
+		if (line.includes('|') && line.trim().startsWith('|')) {
+			const tableRows: string[][] = [];
+			let isHeader = true;
+			let hasSeparator = false;
+
+			while (index < lines.length && lines[index].includes('|')) {
+				const row = lines[index]
+					.split('|')
+					.map(cell => cell.trim())
+					.filter(cell => cell !== '');
+				
+				if (row.length === 0) {
+					index += 1;
+					continue;
+				}
+
+				// Check if it's a separator row (e.g., |---|---|)
+				if (row.every(cell => /^[-:]+$/.test(cell))) {
+					hasSeparator = true;
+					index += 1;
+					continue;
+				}
+
+				tableRows.push(row);
+				index += 1;
+			}
+
+			if (tableRows.length > 0) {
+				let tableHtml = `<div class="mb-6 overflow-x-auto"><table class="min-w-full border-collapse border border-zinc-800 text-sm">`;
+				
+				// Header
+				if (hasSeparator && tableRows.length > 0) {
+					tableHtml += `<thead><tr class="border-b border-zinc-800 bg-zinc-900/50">`;
+					tableRows[0].forEach(cell => {
+						tableHtml += `<th class="px-4 py-2 text-left font-semibold text-zinc-200">${renderInline(cell)}</th>`;
+					});
+					tableHtml += `</tr></thead><tbody>`;
+					
+					// Body
+					for (let i = 1; i < tableRows.length; i++) {
+						tableHtml += `<tr class="border-b border-zinc-800/50">`;
+						tableRows[i].forEach(cell => {
+							tableHtml += `<td class="px-4 py-2 text-zinc-300">${renderInline(cell)}</td>`;
+						});
+						tableHtml += `</tr>`;
+					}
+					tableHtml += `</tbody>`;
+				} else {
+					// No header, just body
+					tableHtml += `<tbody>`;
+					tableRows.forEach(row => {
+						tableHtml += `<tr class="border-b border-zinc-800/50">`;
+						row.forEach(cell => {
+							tableHtml += `<td class="px-4 py-2 text-zinc-300">${renderInline(cell)}</td>`;
+						});
+						tableHtml += `</tr>`;
+					});
+					tableHtml += `</tbody>`;
+				}
+				
+				tableHtml += `</table></div>`;
+				blocks.push(tableHtml);
+			}
+			continue;
+		}
+
+		// Paragraph
 		const paragraphLines = [line];
 		index += 1;
 		while (
@@ -207,7 +305,11 @@ export function renderMarkdown(markdown: string) {
 			!/^>\s?/.test(lines[index]) &&
 			!/^[-*+]\s/.test(lines[index]) &&
 			!/^\d+\.\s/.test(lines[index]) &&
-			!lines[index].startsWith('```')
+			!lines[index].startsWith('```') &&
+			!/^---$/.test(lines[index]) &&
+			!/^\*\*\*$/.test(lines[index]) &&
+			!/^___$/.test(lines[index]) &&
+			!lines[index].includes('|')
 		) {
 			paragraphLines.push(lines[index]);
 			index += 1;
