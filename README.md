@@ -1,6 +1,6 @@
 ![Portfolio banner](/image.webp)
 
-# ghoodev — SvelteKit Portfolio
+# Portfolio using SvelteKit
 
 Personal portfolio for **Teguh Ersyarudin** (`ersyncd`), built with SvelteKit to showcase full-stack work, system architecture, and hardware / IoT integrations.
 
@@ -18,8 +18,7 @@ Personal portfolio for **Teguh Ersyarudin** (`ersyncd`), built with SvelteKit to
 - Vite
 - TypeScript
 - Tailwind CSS v4
-- mdsvex / custom markdown rendering
-- Node.js
+- custom markdown rendering
 
 ## 🗺 Routes
 
