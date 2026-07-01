@@ -1,34 +1,82 @@
 ![Portfolio banner](/image.webp)
 
-# Portfolio 🎨
+# ghoodev — SvelteKit Portfolio
 
-A simple personal portfolio built with Svelte to showcase projects, skills, and contact info.
+Personal portfolio for **Teguh Ersyarudin** (`ersyncd`), built with SvelteKit to showcase full-stack work, system architecture, and hardware / IoT integrations.
 
-## ⚙️ Tech
-- Svelte + Vite
-- HTML, CSS (Tailwind optional)
+## ✨ What’s inside
+
+- Monochrome, high-contrast landing page
+- Fixed header, shared main layout, and persistent footer
+- Markdown-driven blog system
+- Project highlights and contact links
+- Responsive styling with a minimal editorial feel
+
+## 🛠 Tech stack
+
+- SvelteKit
+- Vite
+- TypeScript
+- Tailwind CSS v4
+- mdsvex / custom markdown rendering
 - Node.js
 
-## 🚀 Quick start
-1. git clone https://github.com/revxcode/ghoodev.git
-2. npm install
-3. npm run dev  
-   Open http://localhost:5173
+## 🗺 Routes
 
-## 📦 Build
-- npm run build
-- npm run preview
+- `/` — landing page
+- `/blogs` — blog index, sorted by newest posts first
+- `/blogs/[slug]` — individual blog post pages
+
+## 📝 Blog content
+
+Blog posts live in `src/lib/posts/` and are rendered through the server helpers in `src/lib/server/blog.ts`.
+
+Supported content includes:
+
+- headings
+- paragraphs
+- lists
+- blockquotes
+- code blocks
+- inline code
+- emphasis and links
+
+## 🚀 Getting started
+
+1. Clone the repository:
+   `git clone https://github.com/ersyncd/ghoodev.git`
+2. Install dependencies:
+   `bun install`
+3. Start the dev server:
+   `bun run dev`
+4. Open `http://localhost:5173`
+
+## 📦 Available scripts
+
+- `bun run dev` — start the local development server
+- `bun run build` — create a production build
+- `bun run preview` — preview the production build locally
+- `bun run check` — run Svelte type and diagnostics checks
+- `bun run format` — format the codebase
+- `bun run lint` — check formatting
 
 ## 🗂 Project structure
-- src/ — source code
-- static/ — static assets
-- package.json, vite.config.js
+
+- `src/routes/` — pages and route handlers
+- `src/layouts/` — shared shell layouts
+- `src/lib/posts/` — markdown blog posts
+- `src/lib/server/` — blog parsing and rendering helpers
+- `src/lib/components/` — reusable UI components
+- `static/` — static assets and metadata files
 
 ## 🤝 Contributing
-Fork → branch → PR. Keep commits small and focused.
+
+Contributions are welcome. Keep changes focused, readable, and aligned with the existing visual style.
 
 ## 📬 Contact
-Add email, LinkedIn, or GitHub links here.
+
+Add your email, GitHub, or LinkedIn links in the landing page or footer if you want to make them public.
 
 ## 📄 License
-Add a LICENSE file (e.g., MIT) if needed.
+
+Add a LICENSE file if you want to publish this project under a specific license.

@@ -1,18 +1,46 @@
-@import url('https://fonts.googleapis.com/css2?family=Boldonse&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 
 @import 'tailwindcss';
 
 @theme {
-	--font-poppins: 'Poppins', sans-serif;
-	--font-boldonse: 'Boldonse', sans-serif;
-	--animate-fade-in: fade-in 0.5s ease-in-out;
-	--animate-fade-out: fade-out 0.5s ease-in-out;
-	--animate-waving: waving 3s ease-in-out infinite;
+	--font-sans: 'Inter', system-ui, sans-serif;
+	--font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+	--animate-fade-in: fade-in 0.5s ease-out;
 }
 
 @layer base {
+	:root {
+		color-scheme: dark;
+		background: #09090b;
+	}
+
+	html {
+		@apply scroll-smooth bg-zinc-950;
+	}
+
+	body {
+		@apply min-h-screen bg-zinc-950 font-sans text-zinc-100 antialiased;
+	}
+
 	* {
-		@apply font-poppins;
+		@apply border-zinc-800;
+	}
+
+	::selection {
+		@apply bg-zinc-100 text-zinc-950;
+	}
+
+	a {
+		@apply transition-colors duration-200;
+	}
+
+	button,
+	a,
+	[role='button'],
+	input,
+	textarea,
+	select {
+		@apply outline-none focus-visible:ring-2 focus-visible:ring-zinc-100 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950;
 	}
 }
 
@@ -58,30 +86,36 @@
 	}
 
 	100% {
-		transform: rotate(0deg);
-	}
-}
-
-body {
-	@apply relative w-full min-h-screen;
-}
-
-button {
-	@apply cursor-pointer;
-}
-
-@keyframes fade-in {
-	from {
-		opacity: 0;
-		transform: translateY(-10px);
-	}
-
-	to {
-		opacity: 1;
 		transform: translateY(0);
+		opacity: 1;
 	}
 }
 
 .animate-fade-in {
 	animation: fade-in 0.25s ease-out;
+}
+
+.prose-shell :is(h1, h2, h3, h4) {
+	@apply font-semibold tracking-tight text-zinc-50;
+}
+
+.prose-shell p,
+.prose-shell li {
+	@apply text-zinc-300;
+}
+
+.prose-shell a {
+	@apply text-zinc-100 underline decoration-zinc-600 underline-offset-4 hover:decoration-zinc-100;
+}
+
+.prose-shell pre {
+	@apply overflow-x-auto rounded-2xl border border-zinc-800 bg-zinc-900/60 p-5 text-sm text-zinc-100;
+}
+
+.prose-shell code {
+	@apply rounded-md bg-zinc-900 px-1.5 py-0.5 font-mono text-[0.9em] text-zinc-100;
+}
+
+.prose-shell pre code {
+	@apply rounded-none bg-transparent p-0;
 }
