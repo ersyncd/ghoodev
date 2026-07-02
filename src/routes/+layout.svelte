@@ -5,6 +5,13 @@
 	import MainLayout from '../layouts/main-layout.svelte';
 
 	let { children } = $props();
+
+	function handleFontLoad(event: Event) {
+		const link = event.currentTarget as HTMLLinkElement;
+		if (link) {
+			link.media = 'all';
+		}
+	}
 </script>
 
 <svelte:head>
@@ -15,18 +22,34 @@
 	/>
 	<meta name="theme-color" content="#09090b" />
 
+	<!-- 1. Preconnect to Google Fonts origins -->
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-	<!-- Load Inter -->
+
+	<!-- 2. Preload critical font for LCP (Inter regular weight) -->
 	<link
-		href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-		rel="stylesheet"
+		rel="preload"
+		href="https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyeMZg.woff2"
+		as="font"
+		type="font/woff2"
+		crossorigin="anonymous"
 	/>
-	<!-- Load IBM Plex Mono -->
+
+	<!-- 3. Load Google Fonts NON-BLOCKING with onload as JavaScript expression -->
 	<link
-		href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+		href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
 		rel="stylesheet"
+		media="print"
+		onload={handleFontLoad}
 	/>
+
+	<!-- 4. Fallback for browsers without JavaScript -->
+	<noscript>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+			rel="stylesheet"
+		/>
+	</noscript>
 </svelte:head>
 
 <div class="flex min-h-screen flex-col bg-zinc-950 text-zinc-100">
