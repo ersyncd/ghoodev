@@ -24,21 +24,6 @@ Personal portfolio for **Teguh Ersyarudin** (`ersyncd`), built with SvelteKit to
 
 - `/` — landing page
 - `/blogs` — blog index, sorted by newest posts first
-- `/blogs/[slug]` — individual blog post pages
-
-## 📝 Blog content
-
-Blog posts live in `src/lib/posts/` and are rendered through the server helpers in `src/lib/server/blog.ts`.
-
-Supported content includes:
-
-- headings
-- paragraphs
-- lists
-- blockquotes
-- code blocks
-- inline code
-- emphasis and links
 
 ## 🚀 Getting started
 
