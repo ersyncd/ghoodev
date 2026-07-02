@@ -349,7 +349,7 @@
 				{#each projects as project}
 					<article class="group flex flex-col p-4 transition-all duration-300">
 						<div class="overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-950">
-							<enhanced:img
+							<img
 								src={project.image}
 								alt={project.title}
 								class="aspect-video h-full w-full object-cover grayscale transition duration-500 group-hover:scale-[1.03] group-hover:grayscale-0"
