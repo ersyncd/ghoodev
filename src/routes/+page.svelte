@@ -352,6 +352,10 @@
 							<img
 								src={project.image}
 								alt={project.title}
+								width="1024"
+								height="576"
+								loading="lazy"
+								decoding="async"
 								class="aspect-video h-full w-full object-cover grayscale transition duration-500 group-hover:scale-[1.03] group-hover:grayscale-0"
 							/>
 						</div>
